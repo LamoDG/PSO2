@@ -22,9 +22,42 @@ int bumount()
 }
 int bwrite(unsigned int nbloque, const void *buf)
 {
-return 0
+    int desplazamiento = nbloque * BLOCKSIZE;
+    
+    if(lseek(descriptor,desplazamiento,SEEK_SET)>=0)
+    {
+        int bytesWritten = write(descriptor,buf,BLOCKSIZE);
+
+        if(bytesWritten>=0){
+
+            //se ha escrito correctamente
+            return bytesWritten;
+
+        }
+
+        perror("ERROR 0004 BWIRTE");
+
+    }else{
+
+        perror("ERROR 0003 BWRITE");
+
+    }
+
+    return EXIT_FAILURE;
 }
 int bread(unsigned int nbloque, void *buf)
 {
-return 0
+    if(lseek(descriptor, nbloque,SEEK_SET)>=0){
+
+        int bytesRead = read(descriptor, buf, BLOCKSIZE);
+
+        if(bytesRead>=0){
+            return bytesRead;
+        }
+        perror("ERROR 0006 BREAD");
+        
+    }else{
+        perror("ERROR 0005 BREAD");
+    }
+    return EXIT_FAILURE;
 }
