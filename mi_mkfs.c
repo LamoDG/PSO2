@@ -17,14 +17,12 @@ int main (int argc, char **argv){
 
         int  buffer[BLOCKSIZE];
 
-        int cBloquesAux=cantidad_Bloques; // variable auxiliar para no tocar la cantidad_Bloques inicial
-        <
+           
         memset(buf,0,BLOCKSIZE);//Llenamos el buffer declarado anteriormente de 0
 
-        while(cBloquesAux>0) //Mientras queden bloques por escribir...
+        for( cBloquesAux = 0 ; cBloquesAux<cantidadBloques; cBloquesAux++) //Mientras queden bloques por escribir...
         {
-            bwrite(cBloquesAux,buffer);//Escribimos el buffer en el fichero
-            cBloquesAux--;
+            bwrite(cBloquesAux,buffer);//Escribimos el buffer en el fichero            
         }
 
         bumount();
