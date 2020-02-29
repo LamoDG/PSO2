@@ -36,6 +36,7 @@ int bwrite(unsigned int nbloque, const void *buf)
         int bytesWritten = write(descriptor,buf,BLOCKSIZE);
 
         if(bytesWritten>=0){
+             printf("Hemos escrito %i bytes", bytesWritten);
             //se ha escrito correctamente
             return bytesWritten;
         }
@@ -55,6 +56,7 @@ int bread(unsigned int nbloque, void *buf)
         int bytesRead = read(descriptor, buf, BLOCKSIZE);
 
         if(bytesRead>=0){
+            printf("Hemos leido %i bytes", bytesWritten);
             return bytesRead;
         }
         perror("ERROR 0006 BREAD");
