@@ -59,3 +59,41 @@ int initSB(unsigned int nbloques, unsigned int ninodos){
     if (bwrite(0,&SB) ==-1)return -1; 
     return 0;
 }
+
+// Funcion para definir una zona de memoria con todos los bits a zero
+int initMB(unsigned int nbloques){
+    int i;
+    struct superbloque SB;
+    if (bread(0,&superb) == -1) return -1;
+    unsigned char buffer [BLOCKSIZE];
+    memset(buffer, BLOCKSIZE, 0);	// Nos sirve para asignar un valor a todos los elementos de una array
+    //Escribimos en los bloques correspondientes mediante sucesivas llamadas a bwrite
+    for (i = SB.posPrimerBloqueMB; i < SB.posUltimoBloqueMB; i++){
+        if (bwrite(i, buffer) == -1) return -1;
+    }
+    return 0;           
+}
+
+// Funcion que nos permite enlazar todos los inodos entre si
+int initAI(){
+    struct superbloque SB;
+    if (bread(0,&superb) == -1) return -1;
+    int i,j,variable_incremental;
+    variable_incremental = 1;
+    struct inodo inod [BLOCKSIZE/ sizeof(struct inodo)];
+    for (i = SB.posPrimerBloqueAI; i <= SB.posUltimoBloqueAI; i++){
+		for (j = 0; j < (BLOCKSIZE / sizeof(struct inodo)); j++){
+			inod[j].tipo = 'l';
+			if (variable_incremental < SB.totInodos) {
+				inod[j].punterosDirectos[0] = variable_incremental;
+				variable_incremental++;
+			}else{
+				inod[j].punterosDirectos[0] = 0;
+			}
+		}
+		// Escribimos el vector de inodos
+		if (bwrite(i, inod) == -1) return -1;
+    }
+    if (bwrite(0,&superb)==-1) return -1;
+	return 0;
+}
