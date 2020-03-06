@@ -64,7 +64,7 @@ int initSB(unsigned int nbloques, unsigned int ninodos){
 int initMB(unsigned int nbloques){
     int i;
     struct superbloque SB;
-    if (bread(0,&superb) == -1) return -1;
+    if (bread(0,&SB) == -1) return -1;
     unsigned char buffer [BLOCKSIZE];
     memset(buffer, BLOCKSIZE, 0);	// Nos sirve para asignar un valor a todos los elementos de una array
     //Escribimos en los bloques correspondientes mediante sucesivas llamadas a bwrite
@@ -77,7 +77,7 @@ int initMB(unsigned int nbloques){
 // Funcion que nos permite enlazar todos los inodos entre si
 int initAI(){
     struct superbloque SB;
-    if (bread(0,&superb) == -1) return -1;
+    if (bread(0,&SB) == -1) return -1;
     int i,j,variable_incremental;
     variable_incremental = 1;
     struct inodo inod [BLOCKSIZE/ sizeof(struct inodo)];
@@ -94,6 +94,6 @@ int initAI(){
 		// Escribimos el vector de inodos
 		if (bwrite(i, inod) == -1) return -1;
     }
-    if (bwrite(0,&superb)==-1) return -1;
+    if (bwrite(0,&SB)==-1) return -1;
 	return 0;
 }

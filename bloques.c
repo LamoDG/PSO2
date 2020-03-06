@@ -13,7 +13,7 @@ int bmount(const char *camino)
         perror("ERROR 0001 BMOUNT ");
         return -1;
     }
-    printf("Montamos el fichero");
+    printf("Montamos el fichero\n");
     return descriptor;
 }
 
@@ -23,7 +23,7 @@ int bumount()
         perror("ERROR 0002 BUNMOUNT ");
         return -1;
     }    
-    printf("Desmontamos el fichero");
+    printf("Desmontamos el fichero\n");
     return 1;
 }
 
@@ -56,7 +56,7 @@ int bread(unsigned int nbloque, void *buf)
         int bytesRead = read(descriptor, buf, BLOCKSIZE);
 
         if(bytesRead>=0){
-            printf("Hemos leido %i bytes", bytesWritten);
+            printf("Hemos leido %i bytes", bytesRead);
             return bytesRead;
         }
         perror("ERROR 0006 BREAD");

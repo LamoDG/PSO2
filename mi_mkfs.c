@@ -18,11 +18,11 @@ int main (int argc, char **argv){
         int  buffer[BLOCKSIZE];
 
            
-        memset(buf,0,BLOCKSIZE);//Llenamos el buffer declarado anteriormente de 0
+        memset(buffer,0,BLOCKSIZE);//Llenamos el buffer declarado anteriormente de 0
 
-        for( cBloquesAux = 0 ; cBloquesAux<cantidadBloques; cBloquesAux++) //Mientras queden bloques por escribir...
+        for( cantidadBloques = 0 ; cantidadBloques<cantidadBloques; cantidadBloques++) //Mientras queden bloques por escribir...
         {
-            bwrite(cBloquesAux,buffer);//Escribimos el buffer en el fichero            
+            bwrite(cantidadBloques,buffer);//Escribimos el buffer en el fichero            
         }
 
         bumount();
