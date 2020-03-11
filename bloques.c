@@ -1,15 +1,13 @@
 #include "bloques.h"
 
-
 static int descriptor = 0;
 
-//montamos el fichero que usaremos como dispositivo virtual
+// montamos el fichero que usaremos como dispositivo virtual
 int bmount(const char *camino)
 {
-    //Abrimos el fichero con todos los permisos
+    // abrimos el fichero con todos los permisos
     descriptor = open(camino,O_RDWR|O_CREAT,0666);
     if(descriptor == -1){
-
         perror("ERROR 0001 BMOUNT ");
         return -1;
     }
@@ -19,50 +17,40 @@ int bmount(const char *camino)
 
 int bumount()
 {
-    if(close(descriptor)<0){
-        perror("ERROR 0002 BUNMOUNT ");
+    if(close(descriptor)==-1){
+        perror("ERROR 0002 BUMOUNT ");
         return -1;
     }    
     printf("Desmontamos el fichero\n");
-    return 1;
+    return 0;
 }
 
 int bwrite(unsigned int nbloque, const void *buf)
 {
-    int offset = nbloque * BLOCKSIZE;//desplazamieto
-    
-    if(lseek(descriptor,offset,SEEK_SET)>=0)
-    {
-        int bytesWritten = write(descriptor,buf,BLOCKSIZE);
-
-        if(bytesWritten>=0){
-             printf("Hemos escrito %i bytes", bytesWritten);
-            //se ha escrito correctamente
-            return bytesWritten;
-        }
-        perror("ERROR 0004 BWIRTE");
-
-    }else{
-        perror("ERROR 0003 BWRITE");
+    int desplazamiento = nbloque * BLOCKSIZE;
+    // off_t lseek(descriptor, desplazamiento, SEEK_SET);
+    lseek(descriptor, desplazamiento, SEEK_SET);
+    int bytesEscritos = write(descriptor, buf, BLOCKSIZE);
+    if (bytesEscritos != BLOCKSIZE){
+	    perror("ERROR 0003 BWRITE");
+        return -1;
     }
-
-    return EXIT_FAILURE;
+    // se ha escrito correctamente
+    // printf("Hemos escrito %i bytes", bytesEscritos);
+    return bytesEscritos; 
 }
 
 int bread(unsigned int nbloque, void *buf)
 {
-    if(lseek(descriptor, nbloque, SEEK_SET)>=0){
-
-        int bytesRead = read(descriptor, buf, BLOCKSIZE);
-
-        if(bytesRead>=0){
-            printf("Hemos leido %i bytes", bytesRead);
-            return bytesRead;
-        }
-        perror("ERROR 0006 BREAD");
-        
-    }else{
-        perror("ERROR 0005 BREAD");
+    int desplazamiento = nbloque * BLOCKSIZE;
+    // off_t lseek(descriptor, desplazamiento, SEEK_SET);
+    lseek(descriptor, desplazamiento, SEEK_SET);
+    int bytesLeidos = read(descriptor, buf, BLOCKSIZE);
+    if (bytesLeidos < 0){
+	    perror("ERROR 0004 BREAD");
+        return -1;
     }
-    return EXIT_FAILURE;
+    // se ha leido correctamente
+    // printf("Hemos leido %i bytes", bytesLeidos);
+    return bytesLeidos; 
 }
